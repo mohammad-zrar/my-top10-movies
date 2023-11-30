@@ -2,59 +2,196 @@
   <div class="auth-section">
     <h2>Authentciation</h2>
 
-    <form @submit.prevent="">
+    <form @submit.prevent="submitForm">
       <div v-if="formAction === 'Signup'" class="form-control">
         <label for="email">Email</label>
-        <input type="email" />
+        <input
+          type="email"
+          v-model="mainForm.email.value"
+          @keyup="checkEmail"
+          placeholder="example@gmail.com"
+          :class="{ invalid: !mainForm.email.valid }"
+        />
+        <span class="help">The address must be valid</span>
       </div>
       <div class="form-control">
         <label for="username">Username</label>
-        <input type="text" />
+        <input
+          v-model="mainForm.username.value"
+          @keyup="checkUsername"
+          :class="{ invalid: !mainForm.username.valid }"
+          type="text"
+          placeholder="username"
+        />
+        <span class="help">Length>4, only letter or digit</span>
       </div>
+
       <div class="form-control">
         <label for="password">Password</label>
-        <input type="password" />
+        <input
+          v-model="mainForm.password.value"
+          @keyup="checkPassword"
+          :class="{ invalid: !mainForm.password.valid }"
+          type="password"
+          placeholder="password"
+        />
+        <span class="help"> RegEx: /^[\d\w@-]{8,20}$/i </span>
       </div>
+
       <div class="form-actions">
         <base-button btnStyle="blue">
           {{ formAction }}
         </base-button>
-        <base-button btnStyle="flat" @click="changeAction">
+        <base-button type="button" btnStyle="flat" @click="changeAction">
           <span v-if="formAction === 'Signup'">Login</span>
           <span v-else>Signup</span> Instead</base-button
         >
       </div>
     </form>
   </div>
+
+  <base-dialog :show="showDialog" @close="closeDialog">
+    <template #header>
+      <h2>authentication</h2>
+    </template>
+    <template #body>
+      <p>{{ errMessage }}</p>
+    </template>
+    <template #actions>
+      <base-button color="red" @click="closeDialog">Close</base-button>
+    </template>
+  </base-dialog>
+  <base-spinner v-if="loading"></base-spinner>
 </template>
 
-<script>
+<script setup>
 import BaseButton from "../components/ui/BaseButton.vue";
-import { ref, computed } from "vue";
-export default {
-  components: {
-    BaseButton,
-  },
-  setup() {
-    const formAction = ref("Login");
-    function changeAction() {
-      if (formAction.value === "Login") {
-        formAction.value = "Signup";
-      } else {
-        formAction.value = "Login";
-      }
-    }
+import BaseDialog from "../components/ui/BaseDialog.vue";
+import { ref, computed, reactive, watch } from "vue";
+import useAuthStore from "../store/AuthStore.js";
+import useProfileStore from "../store/ProfileStore.js";
+import BaseSpinner from "../components/ui/BaseSpinner.vue";
 
-    return { formAction, changeAction };
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+const errMessage = ref("");
+const loading = ref(false);
+
+const showDialog = ref(false);
+function closeDialog() {
+  showDialog.value = false;
+}
+function openDialog() {
+  showDialog.value = true;
+}
+
+// Actions Managment
+const formAction = ref("Login");
+function changeAction() {
+  if (formAction.value === "Login") {
+    formAction.value = "Signup";
+  } else {
+    formAction.value = "Login";
+  }
+}
+
+// Validate Form
+const mainForm = reactive({
+  email: {
+    value: "",
+    valid: true,
   },
+  username: {
+    value: "",
+    valid: true,
+  },
+  password: {
+    value: "",
+    valid: true,
+  },
+});
+const patterns = {
+  username: /^[a-z\d]{5,12}$/i,
+  password: /^[\d\w@-]{8,20}$/i,
+  email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
+  //             yourname @ domain   .  com          ( .uk )
 };
+const checkEmail = computed(() => {
+  if (patterns.email.test(mainForm.email.value)) {
+    mainForm.email.valid = true;
+  } else {
+    mainForm.email.valid = false;
+  }
+});
+const checkUsername = computed(() => {
+  if (patterns.username.test(mainForm.username.value)) {
+    mainForm.username.valid = true;
+  } else {
+    mainForm.username.valid = false;
+  }
+});
+const checkPassword = computed(() => {
+  if (patterns.password.test(mainForm.password.value)) {
+    mainForm.password.valid = true;
+  } else {
+    mainForm.password.valid = false;
+  }
+});
+// Submit Form
+
+function submitForm() {
+  if (formAction.value === "Login") {
+    signin();
+  } else {
+    signup();
+  }
+  reset();
+}
+
+async function signup() {
+  loading.value = true;
+  if (
+    mainForm.email.valid &&
+    mainForm.email.value !== "" &&
+    mainForm.username.valid &&
+    mainForm.username.value !== "" &&
+    mainForm.password.valid &&
+    mainForm.password.value !== ""
+  ) {
+    try {
+      const response = await authStore.signup({
+        email: mainForm.email.value,
+        username: mainForm.username.value,
+        password: mainForm.password.value,
+      });
+    } catch (err) {
+      openDialog();
+
+      console.log(err.message);
+      errMessage.value = err.message;
+    }
+  }
+  loading.value = false;
+}
+function signin() {
+  openDialog();
+}
+
+function reset() {
+  mainForm.email.value = "";
+  mainForm.username.value = "";
+  mainForm.password.value = "";
+  mainForm.email.valid = true;
+  mainForm.username.valid = true;
+  mainForm.password.valid = true;
+}
 </script>
 
 <style scoped>
 .auth-section {
   margin: 10rem auto;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-  width: 55%;
+  width: 300px;
   padding: 1.25rem;
 }
 h2 {
@@ -65,11 +202,35 @@ h2 {
   justify-content: center;
   margin: 1rem auto;
 }
+.form-control input {
+  padding: 0.32rem 0.25rem;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid #252a34;
+}
+.form-control input:focus {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+.form-control label {
+  color: #252a34;
+  margin-bottom: 0.25rem;
+}
 .form-actions {
   display: flex;
   gap: 1rem;
+  margin-top: 1.5rem;
 }
-@media screen and (max-width: 768px) {
+.invalid {
+  box-shadow: 0 0 6px rgba(237, 4, 4, 0.5) !important;
+  border-color: red !important;
+}
+.help {
+  font-size: 0.75rem;
+  color: gray;
+  margin-top: 1px;
+}
+
+@media screen and (max-width: 480px) {
   .auth-section {
     width: 85%;
   }
