@@ -69,11 +69,13 @@ import BaseButton from "../components/ui/BaseButton.vue";
 import BaseDialog from "../components/ui/BaseDialog.vue";
 import { ref, computed, reactive, watch } from "vue";
 import useAuthStore from "../store/AuthStore.js";
-import useProfileStore from "../store/ProfileStore.js";
 import BaseSpinner from "../components/ui/BaseSpinner.vue";
+import { useRoute, useRouter } from "vue-router";
 
+// use Router //
+const router = useRouter();
 const authStore = useAuthStore();
-const profileStore = useProfileStore();
+
 const errMessage = ref("");
 const loading = ref(false);
 
@@ -158,15 +160,22 @@ async function signup() {
     mainForm.password.valid &&
     mainForm.password.value !== ""
   ) {
+    const username = mainForm.username.value;
     try {
       const response = await authStore.signup({
         email: mainForm.email.value,
         username: mainForm.username.value,
         password: mainForm.password.value,
       });
+
+      router.replace({
+        name: "userProfile",
+        params: {
+          username: username,
+        },
+      });
     } catch (err) {
       openDialog();
-
       console.log(err.message);
       errMessage.value = err.message;
     }

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-
+let timer;
 const useAuthStore = defineStore("use-auth", {
   state: () => {
     return {
@@ -23,12 +23,37 @@ const useAuthStore = defineStore("use-auth", {
           }
         )
         .then((response) => {
-          console.log("Here we go");
-          console.log(response);
+          this.username = payload.username;
+          this.userId = response.data.localId;
+          this.token = response.data.idToken;
+          // const expiresIn = response.data.expiresIn * 1000;
+          const expiresIn = 5000;
+          const expirationDate = new Date().getTime() + expiresIn; // convert from seconds into miliseconds
+
+          localStorage.setItem("username", payload.username);
+          localStorage.setItem("userId", response.data.idToken);
+          localStorage.setItem("token", response.data.idToken);
+          localStorage.setItem("expirationDate", expirationDate);
+
+          timer = setTimeout(() => {
+            this.logout();
+          }, expiresIn);
         })
         .catch((err) => {
           throw new Error(err.message);
         });
+    },
+
+    logout() {
+      localStorage.removeItem("username");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("token");
+      localStorage.removeItem("expirationDate");
+
+      clearTimeout(timer);
+      this.username = "";
+      this.userId = "";
+      this.token = "";
     },
   },
 });

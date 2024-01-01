@@ -20,7 +20,7 @@
           >
         </li>
         <li class="nav-item">
-          <a @click="toggle" href="#">Logout</a>
+          <a @click="logoutFunctions">Logout</a>
         </li>
       </ul>
     </div>
@@ -35,6 +35,9 @@
 </template>
 <script setup>
 import { reactive, computed } from "vue";
+import useAuthStore from "../store/AuthStore.js";
+
+const authStore = useAuthStore();
 
 const classObjec = reactive({
   collapsed: false,
@@ -49,6 +52,15 @@ function toggle() {
   }
 }
 const dropShow = computed(() => classObjec.dropBack);
+
+function logout() {
+  authStore.logout();
+}
+
+function logoutFunctions() {
+  logout();
+  toggle();
+}
 </script>
 
 <style scoped>
@@ -109,6 +121,7 @@ nav {
 }
 .nav-item {
   margin: 0 1.75rem;
+  cursor: pointer;
 }
 .nav-item a {
   text-decoration: none;
