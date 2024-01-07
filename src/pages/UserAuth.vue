@@ -3,7 +3,7 @@
     <h2>Authentciation</h2>
 
     <form @submit.prevent="submitForm">
-      <div v-if="formAction === 'Signup'" class="form-control">
+      <div class="form-control">
         <label for="email">Email</label>
         <input
           type="email"
@@ -14,7 +14,7 @@
         />
         <span class="help">The address must be valid</span>
       </div>
-      <div class="form-control">
+      <div v-if="formAction === 'Signup'" class="form-control">
         <label for="username">Username</label>
         <input
           v-model="mainForm.username.value"
@@ -182,8 +182,33 @@ async function signup() {
   }
   loading.value = false;
 }
-function signin() {
-  openDialog();
+async function signin() {
+  loading.value = true;
+  if (
+    mainForm.email.valid &&
+    mainForm.email.value !== "" &&
+    mainForm.password.valid &&
+    mainForm.password.value !== ""
+  ) {
+    try {
+      const response = await authStore.login({
+        email: mainForm.email.value,
+        password: mainForm.password.value,
+      });
+
+      router.replace({
+        name: "userProfile",
+        params: {
+          username: "test",
+        },
+      });
+    } catch (err) {
+      openDialog();
+      console.log(err.message);
+      errMessage.value = err.message;
+    }
+  }
+  loading.value = false;
 }
 
 function reset() {

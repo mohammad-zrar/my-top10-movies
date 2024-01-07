@@ -11,17 +11,30 @@ const useAuthStore = defineStore("use-auth", {
   },
   actions: {
     async signup(payload) {
+      this.auth({
+        ...payload,
+        mode: "signup",
+      });
+    },
+
+    async login(payload) {
+      this.auth({
+        ...payload,
+        mode: "login",
+      });
+    },
+    async auth(payload) {
+      let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
+      if (payload.mode === "login") {
+        url =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
+      }
       const response = await axios
-        .post(
-          `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
-            import.meta.env.VITE_API_KEY
-          }`,
-          {
-            email: payload.email,
-            password: payload.password,
-            returnSecureToken: true,
-          }
-        )
+        .post(`${url}?key=${import.meta.env.VITE_API_KEY}`, {
+          email: payload.email,
+          password: payload.password,
+          returnSecureToken: true,
+        })
         .then((response) => {
           this.username = payload.username;
           this.userId = response.data.localId;
@@ -43,7 +56,6 @@ const useAuthStore = defineStore("use-auth", {
           throw new Error(err.message);
         });
     },
-
     logout() {
       localStorage.removeItem("username");
       localStorage.removeItem("userId");
