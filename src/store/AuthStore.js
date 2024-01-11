@@ -28,6 +28,15 @@ const useAuthStore = defineStore("use-auth", {
       if (payload.mode === "login") {
         url =
           "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
+      } else {
+        const isUnique = await this.isUsernameUnique({
+          username: payload.username,
+        });
+        if (isUnique === false) {
+          throw new Error(
+            "This username is already exists please try another one."
+          );
+        }
       }
       const response = await axios
         .post(`${url}?key=${import.meta.env.VITE_API_KEY}`, {
@@ -39,9 +48,16 @@ const useAuthStore = defineStore("use-auth", {
           this.username = payload.username;
           this.userId = response.data.localId;
           this.token = response.data.idToken;
-          // const expiresIn = response.data.expiresIn * 1000;
-          const expiresIn = 5000;
+          const expiresIn = response.data.expiresIn * 1000;
+          // const expiresIn = 5000;
           const expirationDate = new Date().getTime() + expiresIn; // convert from seconds into miliseconds
+          if (payload.mode === "signup") {
+            this.createProfile({
+              username: payload.username,
+              userId: response.data.idToken,
+              token: response.data.idToken,
+            });
+          }
 
           localStorage.setItem("username", payload.username);
           localStorage.setItem("userId", response.data.idToken);
@@ -66,6 +82,29 @@ const useAuthStore = defineStore("use-auth", {
       this.username = "";
       this.userId = "";
       this.token = "";
+    },
+    async isUsernameUnique(payload) {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REF_URL}/profiles.json`
+      );
+      for (const un in response.data) {
+        if (payload.username === un) {
+          return false;
+        }
+      }
+      return true;
+    },
+    async createProfile(payload) {
+      const response = await axios.post(
+        `${import.meta.env.VITE_REF_URL}/profiles/${
+          payload.username
+        }.json?auth=${payload.token}`,
+        {
+          profile: {
+            userId: payload.userId,
+          },
+        }
+      );
     },
   },
 });
