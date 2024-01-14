@@ -34,7 +34,7 @@ const useAuthStore = defineStore("use-auth", {
         });
         if (isUnique === false) {
           throw new Error(
-            "This username is already exists please try another one."
+            "This username is already exists please try another different one."
           );
         }
       }

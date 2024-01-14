@@ -176,7 +176,6 @@ async function signup() {
       });
     } catch (err) {
       openDialog();
-      console.log(err.message);
       errMessage.value = err.message;
     }
   }
