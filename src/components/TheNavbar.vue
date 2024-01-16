@@ -35,9 +35,11 @@
 </template>
 <script setup>
 import { reactive, computed } from "vue";
+import { useRouter } from "vue-router";
 import useAuthStore from "../store/AuthStore.js";
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const classObjec = reactive({
   collapsed: false,
@@ -60,6 +62,7 @@ function logout() {
 function logoutFunctions() {
   logout();
   toggle();
+  router.push({ name: "home" });
 }
 </script>
 

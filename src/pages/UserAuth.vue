@@ -198,12 +198,11 @@ async function signin() {
       router.replace({
         name: "userProfile",
         params: {
-          username: "test",
+          username: userId,
         },
       });
     } catch (err) {
       openDialog();
-      console.log(err.message);
       errMessage.value = err.message;
     }
   }
