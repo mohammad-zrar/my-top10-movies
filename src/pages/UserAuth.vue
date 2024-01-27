@@ -50,7 +50,7 @@
     </form>
   </div>
 
-  <base-dialog :show="showDialog" @close="closeDialog">
+  <base-dialog :show="showDialog" @close="toggleDialog">
     <template #header>
       <h2>authentication</h2>
     </template>
@@ -58,7 +58,7 @@
       <p>{{ errMessage }}</p>
     </template>
     <template #actions>
-      <base-button color="red" @click="closeDialog">Close</base-button>
+      <base-button color="red" @click="toggleDialog">Close</base-button>
     </template>
   </base-dialog>
   <base-spinner v-if="loading"></base-spinner>
@@ -80,11 +80,8 @@ const errMessage = ref("");
 const loading = ref(false);
 
 const showDialog = ref(false);
-function closeDialog() {
-  showDialog.value = false;
-}
-function openDialog() {
-  showDialog.value = true;
+function toggleDialog() {
+  showDialog.value = !showDialog.value;
 }
 
 // Actions Managment
@@ -175,7 +172,7 @@ async function signup() {
         },
       });
     } catch (err) {
-      openDialog();
+      toggleDialog();
       errMessage.value = err.message;
     }
   }
@@ -202,7 +199,7 @@ async function signin() {
         },
       });
     } catch (err) {
-      openDialog();
+      toggleDialog();
       errMessage.value = err.message;
     }
   }

@@ -54,13 +54,14 @@ const useAuthStore = defineStore("use-auth", {
           if (payload.mode === "signup") {
             this.createProfile({
               username: payload.username,
-              userId: response.data.idToken,
+              userId: response.data.localId,
               token: response.data.idToken,
             });
           }
-
+          console.log("here is from AuthStore.js line 61");
+          console.log(response.data);
           localStorage.setItem("username", payload.username);
-          localStorage.setItem("userId", response.data.idToken);
+          localStorage.setItem("userId", response.data.localId);
           localStorage.setItem("token", response.data.idToken);
           localStorage.setItem("expirationDate", expirationDate);
 
@@ -73,7 +74,6 @@ const useAuthStore = defineStore("use-auth", {
         });
     },
     logout() {
-      localStorage.removeItem("username");
       localStorage.removeItem("userId");
       localStorage.removeItem("token");
       localStorage.removeItem("expirationDate");
@@ -96,12 +96,12 @@ const useAuthStore = defineStore("use-auth", {
     },
     async createProfile(payload) {
       const response = await axios.post(
-        `${import.meta.env.VITE_REF_URL}/profiles/${
-          payload.username
-        }.json?auth=${payload.token}`,
+        `${import.meta.env.VITE_REF_URL}/profiles/${payload.userId}.json?auth=${
+          payload.token
+        }`,
         {
           profile: {
-            userId: payload.userId,
+            username: payload.username,
           },
         }
       );
