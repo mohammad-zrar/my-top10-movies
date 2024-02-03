@@ -12,9 +12,9 @@
           placeholder="example@gmail.com"
           :class="{ invalid: !mainForm.email.valid }"
         />
-        <span class="help">The address must be valid</span>
+        <span class="help">Enter valid address</span>
       </div>
-      <div v-if="formAction === 'Signup'" class="form-control">
+      <div v-if="formAction === 'Register'" class="form-control">
         <label for="username">Username</label>
         <input
           v-model="mainForm.username.value"
@@ -43,8 +43,8 @@
           {{ formAction }}
         </base-button>
         <base-button type="button" btnStyle="flat" @click="changeAction">
-          <span v-if="formAction === 'Signup'">Login</span>
-          <span v-else>Signup</span> Instead</base-button
+          <span v-if="formAction === 'Register'">Login</span>
+          <span v-else>Register</span> Instead</base-button
         >
       </div>
     </form>
@@ -88,7 +88,7 @@ function toggleDialog() {
 const formAction = ref("Login");
 function changeAction() {
   if (formAction.value === "Login") {
-    formAction.value = "Signup";
+    formAction.value = "Register";
   } else {
     formAction.value = "Login";
   }
@@ -159,7 +159,7 @@ async function signup() {
   ) {
     const username = mainForm.username.value;
     try {
-      const response = await authStore.signup({
+      const response = await authStore.register({
         email: mainForm.email.value,
         username: mainForm.username.value,
         password: mainForm.password.value,
@@ -194,7 +194,7 @@ async function signin() {
       router.replace({
         name: "userProfile",
         params: {
-          username: userId,
+          username: response.username,
         },
       });
     } catch (err) {

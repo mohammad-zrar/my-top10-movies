@@ -1,19 +1,26 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import useProfileStore from "./ProfileStore.js";
 let timer;
 const useAuthStore = defineStore("use-auth", {
   state: () => {
     return {
-      username: "",
       userId: "",
       token: "",
+      isUserAuthenticated: false,
     };
   },
+  getters: {
+    isAuthenticated(state) {
+      return state.isUserAuthenticated;
+    },
+  },
+
   actions: {
-    async signup(payload) {
+    async register(payload) {
       return await this.auth({
         ...payload,
-        mode: "signup",
+        mode: "register",
       });
     },
 
@@ -24,6 +31,7 @@ const useAuthStore = defineStore("use-auth", {
       });
     },
     async auth(payload) {
+      const profileStore = useProfileStore();
       let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
       if (payload.mode === "login") {
         url =
@@ -51,9 +59,8 @@ const useAuthStore = defineStore("use-auth", {
           const expiresIn = response.data.expiresIn * 1000;
           // const expiresIn = 5000;
           const expirationDate = new Date().getTime() + expiresIn; // convert from seconds into miliseconds
-          console.log("The Error is from here");
-          if (payload.mode === "signup") {
-            this.createProfile({
+          if (payload.mode === "register") {
+            profileStore.createProfile({
               username: this.username,
               userId: this.userId,
               token: this.token,
@@ -63,7 +70,7 @@ const useAuthStore = defineStore("use-auth", {
           localStorage.setItem("userId", response.data.localId);
           localStorage.setItem("token", response.data.idToken);
           localStorage.setItem("expirationDate", expirationDate);
-
+          this.isUserAuthenticated = true;
           timer = setTimeout(() => {
             this.logout();
           }, expiresIn);
@@ -71,38 +78,25 @@ const useAuthStore = defineStore("use-auth", {
         .catch((err) => {
           throw new Error(err.message);
         });
+      return { username: "hhhh" };
     },
     logout() {
       localStorage.removeItem("userId");
       localStorage.removeItem("token");
       localStorage.removeItem("expirationDate");
-
+      this.isUserAuthenticated = false;
       clearTimeout(timer);
       this.username = "";
       this.userId = "";
       this.token = "";
     },
     async isUsernameUnique(payload) {
-      const response = await axios.put(
+      const response = await axios.get(
         `${import.meta.env.VITE_REF_URL}/profiles.json`
       );
-      console.log("Here is the response", response);
-      console.log("Here is the payload", payload);
+      // Check the username if already exists return (false)
 
       return true;
-    },
-    async createProfile(payload) {
-      console.log("The error start from here");
-      const response = await axios.post(
-        `${import.meta.env.VITE_REF_URL}/profiles/${payload.userId}.json?auth=${
-          payload.token
-        }`,
-        {
-          profile: {
-            username: payload.username,
-          },
-        }
-      );
     },
   },
 });

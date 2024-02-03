@@ -64,6 +64,7 @@ function logoutFunctions() {
   toggle();
   router.push({ name: "home" });
 }
+const isAuthenticated = computed(() => authStore.isAuthenticated);
 </script>
 
 <style scoped>

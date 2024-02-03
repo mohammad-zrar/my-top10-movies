@@ -2,22 +2,22 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 const useProfileStore = defineStore("use-profile", {
+  state: {},
   actions: {
-    async isUsernameUnique(payload) {
-      const response = await axios.get(
-        `${import.meta.env.VITE_REF_URL}profiles/${payload.username}.json`
-      );
-      console.log(response.data);
-    },
     async createProfile(payload) {
-      const response = await axios.post(
-        `${import.meta.env.VITE_REF_URL}profiles/${payload.username}.json?`,
+      const response = await axios.put(
+        `${import.meta.env.VITE_REF_URL}/profiles/${payload.userId}.json?auth=${
+          payload.token
+        }`,
         {
-          userId: "nwOZBEoGyvPJ4DMmlnMdfWOJxPX2",
-          movies: ["hhh", "fff", "ddd"],
+          profile: {
+            username: payload.username,
+          },
         }
       );
-      console.log(response);
+    },
+    async findUserByUserId(payload) {
+      const response = await axios.get();
     },
   },
 });
