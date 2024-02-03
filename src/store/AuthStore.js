@@ -37,13 +37,11 @@ const useAuthStore = defineStore("use-auth", {
         url =
           "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
       } else {
-        const isUnique = await this.isUsernameUnique({
+        const isUnique = await profileStore.isUsernameAvailable({
           username: payload.username,
         });
         if (isUnique === false) {
-          throw new Error(
-            "This username is already exists please try another different one."
-          );
+          throw new Error("Username already exists, try another diffrent one.");
         }
       }
       const response = await axios
@@ -78,6 +76,7 @@ const useAuthStore = defineStore("use-auth", {
         .catch((err) => {
           throw new Error(err.message);
         });
+      profileStore.findUserByUserId({ userId: this.userId });
       return { username: "hhhh" };
     },
     logout() {

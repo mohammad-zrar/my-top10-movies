@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 const useProfileStore = defineStore("use-profile", {
-  state: {},
   actions: {
     async createProfile(payload) {
       const response = await axios.put(
@@ -17,7 +16,22 @@ const useProfileStore = defineStore("use-profile", {
       );
     },
     async findUserByUserId(payload) {
-      const response = await axios.get();
+      const response = await axios.get(
+        `${import.meta.env.VITE_REF_URL}/profiles.json`
+      );
+    },
+    async isUsernameAvailable(payload) {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REF_URL}/profiles.json`
+      );
+      // check username availability, return false if the username is already exists
+      const profiles = response.data;
+      for (const userId in profiles) {
+        if (profiles[userId].profile.username === payload.username) {
+          return false;
+        }
+      }
+      return true;
     },
   },
 });
