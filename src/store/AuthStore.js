@@ -76,8 +76,10 @@ const useAuthStore = defineStore("use-auth", {
         .catch((err) => {
           throw new Error(err.message);
         });
-      profileStore.findUserByUserId({ userId: this.userId });
-      return { username: "hhhh" };
+      const profile = await profileStore.findUserByUserId({
+        userId: this.userId,
+      });
+      return { username: profile.profile.username };
     },
     logout() {
       localStorage.removeItem("userId");
@@ -88,14 +90,6 @@ const useAuthStore = defineStore("use-auth", {
       this.username = "";
       this.userId = "";
       this.token = "";
-    },
-    async isUsernameUnique(payload) {
-      const response = await axios.get(
-        `${import.meta.env.VITE_REF_URL}/profiles.json`
-      );
-      // Check the username if already exists return (false)
-
-      return true;
     },
   },
 });

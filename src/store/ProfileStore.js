@@ -19,6 +19,8 @@ const useProfileStore = defineStore("use-profile", {
       const response = await axios.get(
         `${import.meta.env.VITE_REF_URL}/profiles.json`
       );
+      const profiles = response.data;
+      return profiles[payload.userId];
     },
     async isUsernameAvailable(payload) {
       const response = await axios.get(
