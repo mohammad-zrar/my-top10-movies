@@ -11,14 +11,14 @@ const useAuthStore = defineStore("use-auth", {
   },
   actions: {
     async signup(payload) {
-      this.auth({
+      return await this.auth({
         ...payload,
         mode: "signup",
       });
     },
 
     async login(payload) {
-      this.auth({
+      return await this.auth({
         ...payload,
         mode: "login",
       });
@@ -51,16 +51,15 @@ const useAuthStore = defineStore("use-auth", {
           const expiresIn = response.data.expiresIn * 1000;
           // const expiresIn = 5000;
           const expirationDate = new Date().getTime() + expiresIn; // convert from seconds into miliseconds
+          console.log("The Error is from here");
           if (payload.mode === "signup") {
             this.createProfile({
-              username: payload.username,
-              userId: response.data.localId,
-              token: response.data.idToken,
+              username: this.username,
+              userId: this.userId,
+              token: this.token,
             });
           }
-          console.log("here is from AuthStore.js line 61");
-          console.log(response.data);
-          localStorage.setItem("username", payload.username);
+
           localStorage.setItem("userId", response.data.localId);
           localStorage.setItem("token", response.data.idToken);
           localStorage.setItem("expirationDate", expirationDate);
@@ -84,17 +83,16 @@ const useAuthStore = defineStore("use-auth", {
       this.token = "";
     },
     async isUsernameUnique(payload) {
-      const response = await axios.get(
+      const response = await axios.put(
         `${import.meta.env.VITE_REF_URL}/profiles.json`
       );
-      for (const un in response.data) {
-        if (payload.username === un) {
-          return false;
-        }
-      }
+      console.log("Here is the response", response);
+      console.log("Here is the payload", payload);
+
       return true;
     },
     async createProfile(payload) {
+      console.log("The error start from here");
       const response = await axios.post(
         `${import.meta.env.VITE_REF_URL}/profiles/${payload.userId}.json?auth=${
           payload.token

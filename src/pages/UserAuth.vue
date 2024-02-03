@@ -164,7 +164,6 @@ async function signup() {
         username: mainForm.username.value,
         password: mainForm.password.value,
       });
-
       router.replace({
         name: "userProfile",
         params: {
