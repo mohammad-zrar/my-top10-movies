@@ -10,16 +10,22 @@
 
       <ul class="nav-menu" :class="{ collapsed: classObjec.collapsed }">
         <li class="nav-item">
-          <router-link @click="toggle" :to="{ name: 'home' }"
+          <router-link
+            @click="toggle"
+            :to="{ name: 'home' }"
+            v-if="isAuthenticated"
             >My Profile</router-link
           >
         </li>
         <li class="nav-item">
-          <router-link @click="toggle" :to="{ name: 'userAuth' }"
+          <router-link
+            @click="toggle"
+            :to="{ name: 'userAuth' }"
+            v-if="!isAuthenticated"
             >Login</router-link
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAuthenticated">
           <a @click="logoutFunctions">Logout</a>
         </li>
       </ul>
@@ -34,7 +40,7 @@
   </nav>
 </template>
 <script setup>
-import { reactive, computed } from "vue";
+import { reactive, computed, warn } from "vue";
 import { useRouter } from "vue-router";
 import useAuthStore from "../store/AuthStore.js";
 
