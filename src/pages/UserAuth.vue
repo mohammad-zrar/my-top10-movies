@@ -144,7 +144,6 @@ function submitForm() {
   } else {
     signup();
   }
-  reset();
 }
 
 async function signup() {
@@ -203,15 +202,6 @@ async function signin() {
     }
   }
   loading.value = false;
-}
-
-function reset() {
-  mainForm.email.value = "";
-  mainForm.username.value = "";
-  mainForm.password.value = "";
-  mainForm.email.valid = true;
-  mainForm.username.valid = true;
-  mainForm.password.valid = true;
 }
 </script>
 
