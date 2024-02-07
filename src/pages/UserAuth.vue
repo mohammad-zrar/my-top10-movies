@@ -12,7 +12,7 @@
           placeholder="example@gmail.com"
           :class="{ invalid: !mainForm.email.valid }"
         />
-        <span class="help">Enter valid address</span>
+        <span class="help">Enter a valid address</span>
       </div>
       <div v-if="formAction === 'Register'" class="form-control">
         <label for="username">Username</label>
@@ -35,7 +35,7 @@
           type="password"
           placeholder="password"
         />
-        <span class="help"> RegEx: /^[\d\w@-]{8,20}$/i </span>
+        <span class="help"> Enter a strong password </span>
       </div>
 
       <div class="form-actions">
@@ -111,7 +111,7 @@ const mainForm = reactive({
 });
 const patterns = {
   username: /^[a-z\d]{5,12}$/i,
-  password: /^[\d\w@-]{8,20}$/i,
+  password: /^[\d\w@#$%^&*()-_=+[\]{};:'",.<>/?!|\\`~]{8,20}$/i,
   email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
   //             yourname @ domain   .  com          ( .uk )
 };
