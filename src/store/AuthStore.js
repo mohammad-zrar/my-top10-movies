@@ -82,7 +82,10 @@ const useAuthStore = defineStore("use-auth", {
       return { username: profile.profile.username };
     },
     tryLogin() {
-      pass;
+      this.userId = localStorage.getItem("userId");
+      this.token = localStorage.getItem("token");
+
+      console.log(localStorage.getItem("expirationDate"));
     },
     logout() {
       localStorage.removeItem("userId");
