@@ -15,12 +15,20 @@ const useProfileStore = defineStore("use-profile", {
         }
       );
     },
-    async findUserByUserId(payload) {
+    async getProfileByUserId(payload) {
       const response = await axios.get(
         `${import.meta.env.VITE_REF_URL}/profiles.json`
       );
       const profiles = response.data;
       return profiles[payload.userId];
+    },
+    async getUsernameByUserId(payload) {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REF_URL}/profiles/${
+          payload.userId
+        }/profile/username.json`
+      );
+      return response.data;
     },
     async isUsernameAvailable(payload) {
       const response = await axios.get(

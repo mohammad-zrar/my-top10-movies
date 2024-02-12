@@ -14,6 +14,9 @@ const useAuthStore = defineStore("use-auth", {
     isAuthenticated(state) {
       return state.isUserAuthenticated;
     },
+    getUserId(state) {
+      return state.userId;
+    },
   },
 
   actions: {
