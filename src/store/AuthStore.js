@@ -76,16 +76,10 @@ const useAuthStore = defineStore("use-auth", {
         .catch((err) => {
           throw new Error(err.message);
         });
-      const profile = await profileStore.findUserByUserId({
-        userId: this.userId,
-      });
-      return { username: profile.profile.username };
     },
     tryLogin() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
-
-      console.log(localStorage.getItem("expirationDate"));
     },
     logout() {
       localStorage.removeItem("userId");

@@ -52,13 +52,15 @@
 
   <base-dialog :show="showDialog" @close="toggleDialog">
     <template #header>
-      <h2>authentication</h2>
+      <h2>Authentication...</h2>
     </template>
     <template #body>
-      <p>{{ errMessage }}</p>
+      <p>{{ dialogMessage }}</p>
     </template>
     <template #actions>
-      <base-button color="red" @click="toggleDialog">Close</base-button>
+      <base-button color="red" @click="toggleDialog">
+        <span>Close</span>
+      </base-button>
     </template>
   </base-dialog>
   <base-spinner v-if="loading"></base-spinner>
@@ -76,7 +78,7 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const authStore = useAuthStore();
 
-const errMessage = ref("");
+const dialogMessage = ref("");
 const loading = ref(false);
 
 const showDialog = ref(false);
@@ -156,22 +158,22 @@ async function signup() {
     mainForm.password.valid &&
     mainForm.password.value !== ""
   ) {
-    const username = mainForm.username.value;
     try {
       const response = await authStore.register({
         email: mainForm.email.value,
         username: mainForm.username.value,
         password: mainForm.password.value,
       });
-      router.replace({
-        name: "userProfile",
-        params: {
-          username: username,
-        },
-      });
-    } catch (err) {
+      dialogMessage.value =
+        "Account registered successfully. You can now log in.";
       toggleDialog();
-      errMessage.value = err.message;
+      changeAction();
+      mainForm.email.value = "";
+      mainForm.username.value = "";
+      mainForm.password.value = "";
+    } catch (err) {
+      dialogMessage.value = err.message;
+      toggleDialog();
     }
   }
   loading.value = false;
@@ -189,16 +191,9 @@ async function signin() {
         email: mainForm.email.value,
         password: mainForm.password.value,
       });
-
-      router.replace({
-        name: "userProfile",
-        params: {
-          username: response.username,
-        },
-      });
     } catch (err) {
+      dialogMessage.value = err.message;
       toggleDialog();
-      errMessage.value = err.message;
     }
   }
   loading.value = false;
