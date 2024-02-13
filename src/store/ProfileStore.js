@@ -30,6 +30,17 @@ const useProfileStore = defineStore("use-profile", {
       );
       return response.data;
     },
+    async getProfileByUsernam(payload) {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REF_URL}/profiles.json`
+      );
+      const profiles = await response.data;
+      for (const userId in profiles) {
+        if (profiles[userId].profile.username === payload.username) {
+          return { userId: userId, ...profiles[userId] };
+        }
+      }
+    },
     async isUsernameAvailable(payload) {
       const response = await axios.get(
         `${import.meta.env.VITE_REF_URL}/profiles.json`

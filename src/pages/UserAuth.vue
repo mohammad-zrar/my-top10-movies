@@ -85,6 +85,7 @@ const loading = ref(false);
 const showDialog = ref(false);
 function toggleDialog() {
   showDialog.value = !showDialog.value;
+  loading.value = false;
 }
 
 // Actions Managment
