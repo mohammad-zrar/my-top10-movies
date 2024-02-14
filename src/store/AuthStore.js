@@ -7,6 +7,7 @@ const useAuthStore = defineStore("use-auth", {
     return {
       userId: "",
       token: "",
+      username: "",
       isUserAuthenticated: false,
     };
   },
@@ -58,23 +59,21 @@ const useAuthStore = defineStore("use-auth", {
           this.userId = response.data.localId;
           this.token = response.data.idToken;
           const expiresIn = response.data.expiresIn * 1000;
-          // const expiresIn = 5000;
-          const expirationDate = new Date().getTime() + expiresIn; // convert from seconds into miliseconds
+          const expirationDate = new Date().getTime() + expiresIn;
+
           if (payload.mode === "register") {
             profileStore.createProfile({
               username: this.username,
               userId: this.userId,
               token: this.token,
             });
+          } else {
+            localStorage.setItem("userId", response.data.localId);
+            localStorage.setItem("token", response.data.idToken);
+            localStorage.setItem("expirationDate", expirationDate);
+            this.isUserAuthenticated = true;
+            this.autoLogout({ expiresIn: expiresIn });
           }
-
-          localStorage.setItem("userId", response.data.localId);
-          localStorage.setItem("token", response.data.idToken);
-          localStorage.setItem("expirationDate", expirationDate);
-          this.isUserAuthenticated = true;
-          timer = setTimeout(() => {
-            this.logout();
-          }, expiresIn);
         })
         .catch((err) => {
           throw new Error(err.message);
@@ -83,6 +82,24 @@ const useAuthStore = defineStore("use-auth", {
     tryLogin() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
+      const expirationDate = localStorage.getItem("expirationDate");
+
+      if (expirationDate && this.userId && this.token) {
+        const currentDateTime = new Date().getTime();
+
+        if (expirationDate > currentDateTime) {
+          this.isUserAuthenticated = true;
+        } else {
+          this.logout();
+        }
+        const expiresIn = +expirationDate - currentDateTime;
+        this.autoLogout({ expiresIn: expiresIn });
+      }
+    },
+    autoLogout(payload) {
+      timer = setTimeout(() => {
+        this.logout();
+      }, payload.expiresIn);
     },
     logout() {
       localStorage.removeItem("userId");

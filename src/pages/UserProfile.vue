@@ -6,14 +6,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import useProfileStore from "../store/ProfileStore.js";
 
 const router = useRouter();
 const route = useRoute();
 
-const ProfileStore = useProfileStore();
+const profileStore = useProfileStore();
 
 const profileData = ref({
   userId: "",
@@ -22,7 +22,7 @@ const profileData = ref({
 const isLoading = ref(true);
 
 onMounted(async () => {
-  const profile = await ProfileStore.getProfileByUsernam({
+  const profile = await profileStore.getProfileByUsernam({
     username: route.params.username,
   });
   profileData.value = { ...profile };

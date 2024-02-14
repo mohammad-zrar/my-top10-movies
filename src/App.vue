@@ -6,7 +6,15 @@
 </template>
 
 <script setup>
+import { onBeforeMount } from "vue";
+import useAuthStore from "./store/AuthStore.js";
 import TheNavbar from "./components/TheNavbar.vue";
+
+const authStore = useAuthStore();
+
+onBeforeMount(() => {
+  authStore.tryLogin();
+});
 </script>
 
 <style>
