@@ -5,14 +5,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TheNavbar from "./components/TheNavbar.vue";
-
-export default {
-  components: {
-    TheNavbar,
-  },
-};
 </script>
 
 <style>

@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, toRef } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import useProfileStore from "../store/ProfileStore.js";
 
@@ -15,7 +15,10 @@ const route = useRoute();
 
 const ProfileStore = useProfileStore();
 
-const profileData = ref(null);
+const profileData = ref({
+  userId: "",
+  profile: { username: "" },
+});
 const isLoading = ref(true);
 
 onMounted(async () => {
