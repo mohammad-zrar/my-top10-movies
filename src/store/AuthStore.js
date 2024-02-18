@@ -18,6 +18,9 @@ const useAuthStore = defineStore("use-auth", {
     getUserId(state) {
       return state.userId;
     },
+    getUsername(state) {
+      return state.username;
+    },
   },
 
   actions: {
