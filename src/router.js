@@ -11,7 +11,18 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      redirect: { name: "userAuth" },
+      redirect: () => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated) {
+          return {
+            name: "userProfile",
+            params: { username: authStore.getUsername },
+          };
+        }
+
+        return { name: "userAuth" };
+      },
     },
     {
       path: "/auth",
@@ -21,7 +32,10 @@ const router = createRouter({
         const authStore = useAuthStore();
 
         if (authStore.isAuthenticated) {
-          return false;
+          return {
+            name: "userProfile",
+            params: { username: authStore.getUsername },
+          };
         }
 
         return true;
