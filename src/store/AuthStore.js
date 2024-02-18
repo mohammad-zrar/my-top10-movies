@@ -54,37 +54,41 @@ const useAuthStore = defineStore("use-auth", {
           password: payload.password,
           returnSecureToken: true,
         })
-        .then((response) => {
-          this.username = payload.username;
-          this.userId = response.data.localId;
-          this.token = response.data.idToken;
-          const expiresIn = response.data.expiresIn * 1000;
-          const expirationDate = new Date().getTime() + expiresIn;
-
-          if (payload.mode === "register") {
-            profileStore.createProfile({
-              username: this.username,
-              userId: this.userId,
-              token: this.token,
-            });
-          } else {
-            localStorage.setItem("userId", response.data.localId);
-            localStorage.setItem("token", response.data.idToken);
-            localStorage.setItem("expirationDate", expirationDate);
-            this.isUserAuthenticated = true;
-            this.autoLogout({ expiresIn: expiresIn });
-          }
-        })
         .catch((err) => {
           throw new Error(err.message);
         });
+      this.userId = response.data.localId;
+      this.token = response.data.idToken;
+      const expiresIn = response.data.expiresIn * 1000;
+      const expirationDate = new Date().getTime() + expiresIn;
+
+      if (payload.mode === "register") {
+        this.username = payload.username;
+        await profileStore.createProfile({
+          username: this.username,
+          userId: this.userId,
+          token: this.token,
+        });
+      } else {
+        this.username = await profileStore.getUsernameByUserId({
+          userId: this.userId,
+        });
+        localStorage.setItem("username", this.username);
+        localStorage.setItem("userId", this.userId);
+        localStorage.setItem("token", this.token);
+        localStorage.setItem("expirationDate", expirationDate);
+        this.isUserAuthenticated = true;
+        this.autoLogout({ expiresIn: expiresIn });
+      }
     },
+
     tryLogin() {
       this.userId = localStorage.getItem("userId");
       this.token = localStorage.getItem("token");
+      this.username = localStorage.getItem("username");
       const expirationDate = localStorage.getItem("expirationDate");
 
-      if (expirationDate && this.userId && this.token) {
+      if ((expirationDate && this.userId && this.token, this.username)) {
         const currentDateTime = new Date().getTime();
 
         if (expirationDate > currentDateTime) {
@@ -94,6 +98,8 @@ const useAuthStore = defineStore("use-auth", {
         }
         const expiresIn = +expirationDate - currentDateTime;
         this.autoLogout({ expiresIn: expiresIn });
+      } else {
+        this.logout();
       }
     },
     autoLogout(payload) {
@@ -104,9 +110,12 @@ const useAuthStore = defineStore("use-auth", {
     logout() {
       localStorage.removeItem("userId");
       localStorage.removeItem("token");
+      localStorage.removeItem("username");
       localStorage.removeItem("expirationDate");
-      this.isUserAuthenticated = false;
       clearTimeout(timer);
+
+      this.isUserAuthenticated = false;
+
       this.username = "";
       this.userId = "";
       this.token = "";

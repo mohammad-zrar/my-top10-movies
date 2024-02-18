@@ -14,8 +14,7 @@ const app = createApp(App);
 app.component("font-awesome-icon", FontAwesomeIcon);
 
 app.config.productionTip = false;
-
-app.use(router);
 app.use(createPinia());
+app.use(router);
 
 app.mount("#app");
