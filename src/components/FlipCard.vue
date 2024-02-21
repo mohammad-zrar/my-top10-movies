@@ -11,13 +11,25 @@
       </div>
       <div class="flip-card-back">
         <h1 class="movie-title">The Wolf of Wall Street (1999)</h1>
-        <div class="overview">
-          <h3 class="header">Overview</h3>
+        <div class="overview-section">
+          <h3 class="header">My Overview</h3>
           <p class="body">
             A New York stockbroker refuses to cooperate in a large securities
             fraud case involving corruption on Wall Street, corporate banking
             world and mob infiltration. Based on Jordan Belfort's autobiography.
           </p>
+        </div>
+        <div class="rating-section">
+          <h3 class="header">My Rate</h3>
+          <p class="body"><span id="rate-value">8</span> / 10</p>
+        </div>
+        <div class="actions-section">
+          <div class="edit-button">
+            <base-button>Edit</base-button>
+          </div>
+          <div class="delete-button">
+            <base-button>Delete</base-button>
+          </div>
         </div>
       </div>
     </div>
@@ -25,6 +37,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import BaseButton from "./ui/BaseButton.vue";
 </script>
 <style scoped>
 .flip-card {
@@ -78,14 +91,29 @@ import { ref } from "vue";
 .movie-title {
   margin-top: 1rem;
 }
-.overview .header {
+.overview-section .header,
+.rating-section .header {
+  color: #ff2e63;
   display: inline-block;
   font-weight: 500;
-  border-bottom: solid 2px #eaeaea;
+  border-bottom: solid 1px #ff2e63;
+  margin-bottom: 0.5rem;
 }
 
-.overview .body {
-  font-size: 0.8rem;
-  margin: auto 1.2rem;
+.overview-section .body {
+  font-size: 0.9rem;
+  margin: auto 0.5rem;
+}
+.rating-section .body {
+  font-size: 1rem;
+}
+#rate-value {
+  color: #ff2e63;
+  font-weight: bold;
+}
+
+/* ---- Actions section ---- */
+.actions-section {
+  display: flex;
 }
 </style>
