@@ -4,7 +4,7 @@
       <div class="flip-card-front">
         <h1 class="rank-number">1</h1>
         <img
-          src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/jHxCeXnSchAuwHnmVatTgqMYdX8.jpg"
+          src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/34m2tygAYBGqA9MXKhRDtzYd4MR.jpg"
           alt="Poster"
           style="width: 300px; height: 450px"
         />
@@ -13,33 +13,35 @@
         <h1 class="movie-title">The Wolf of Wall Street (1999)</h1>
         <div class="overview-section">
           <h3 class="header">My Overview</h3>
-          <p class="body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
-            gravida justo. Integer nec arcu ut ligula tristique lobortis eu id
-            nisl. Quisque at velit non elit euismod vulputate. Fusce eu
-            fringilla libero. Proin at mi sit amet urna ullamcorper suscipit ac
-            eu dui. In hac habitasse platea dictumst. Nam bibendum purus nec
-            tellus fringilla, vel efficitur nisi vulputate. Suspendisse in massa
-            nec ex vulputate commodo. Vestibulum sagittis, nisl vitae bibendum
-            congue, odio arcu vestibulum velit, sit amet tristique libero purus
-            vel elit. Vestibulum consectetur turpis sit amet sapien consectetur,
-            at lacinia justo hendrerit. Duis vel purus vitae tortor luctus
-            bibendum.
-          </p>
+          <div class="body-container">
+            <p class="body">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
+              gravida justo. Integer nec arcu ut ligula tristique lobortis eu id
+              nisl. Quisque at velit non elit euismod vulputate. Fusce eu
+              fringilla libero. Proin at mi sit amet urna ullamcorper suscipit
+              ac eu dui. In hac habitasse platea dictumst. Nam bibendum purus
+              nec tellus fringilla, vel efficitur nisi vulputate. Suspendisse in
+              massa nec ex vulputate commodo. Vestibulum sagittis, nisl vitae
+              bibendum congue, odio arcu vestibulum velit, sit amet tristique
+              libero purus vel elit. Vestibulum consectetur turpis sit amet
+              sapien consectetur, at lacinia justo hendrerit. Duis vel purus
+              vitae tortor luctus bibendum.
+            </p>
+          </div>
         </div>
         <div class="rating-section">
           <h3 class="header">My Rate</h3>
           <p class="body"><span id="rate-value">8</span> / 10</p>
         </div>
         <!-- Actions Section -->
-        <div class="actions-section">
+        <!-- <div class="actions-section">
           <div class="edit-button">
             <base-button btnStyle="light">Edit</base-button>
           </div>
           <div class="delete-button">
             <base-button btnStyle="danger">Delete</base-button>
           </div>
-        </div>
+        </div> -->
         <!-- End Action Section -->
       </div>
     </div>
@@ -112,26 +114,6 @@ import BaseButton from "./ui/BaseButton.vue";
 }
 
 /* Overview section */
-.overview-section {
-  max-height: calc(
-    100% - 60px
-  ); /* Adjust the value to leave space for header and actions */
-  overflow-y: auto; /* Use 'auto' to show scrollbars if necessary */
-  word-wrap: break-word;
-  &::-webkit-scrollbar {
-    width: 8px; /* Set the width of the scrollbar */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #d9d9d9; /* Color of the thumb */
-    border-radius: 4px; /* Rounded corners of the thumb */
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: #363b45; /* Color of the track */
-    border-radius: 4px;
-  }
-}
 
 .overview-section .header,
 .rating-section .header {
@@ -144,6 +126,47 @@ import BaseButton from "./ui/BaseButton.vue";
 .overview-section .body {
   font-size: 0.75rem;
 }
+
+/* ... existing styles ... */
+.overview-section {
+  max-height: calc(100% - 60px);
+  overflow-y: hidden; /* Hide the main scrollbar of the section */
+  word-wrap: break-word;
+  position: relative; /* Ensure relative positioning for absolute positioning of header */
+
+  /* Additional styles for the header */
+  .header {
+    color: #ff2e63;
+    display: inline-block;
+    font-weight: 500;
+    border-bottom: solid 1px #ff2e63;
+  }
+
+  .body-container {
+    overflow-y: auto; /* Enable scrolling only for the body container */
+    max-height: calc(
+      100% - 40px
+    ); /* Adjust the value to leave space for the header */
+    padding: 10px; /* Adjust padding as needed */
+  }
+}
+
+/* Scrollbar styles for the body container */
+.overview-section .body-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overview-section .body-container::-webkit-scrollbar-thumb {
+  background-color: #555555;
+  border-radius: 4px;
+}
+
+.overview-section .body-container::-webkit-scrollbar-track {
+  background-color: #363b45; /* Color of the track */
+  border-radius: 4px; /* Rounded corners of the track */
+}
+/* ... existing styles ... */
+
 /* Rating Section */
 .rating-section .body {
   font-size: 1rem;
