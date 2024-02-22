@@ -34,14 +34,14 @@
           <p class="body"><span id="rate-value">8</span> / 10</p>
         </div>
         <!-- Actions Section -->
-        <!-- <div class="actions-section">
+        <div class="actions-section">
           <div class="edit-button">
             <base-button btnStyle="light">Edit</base-button>
           </div>
           <div class="delete-button">
             <base-button btnStyle="danger">Delete</base-button>
           </div>
-        </div> -->
+        </div>
         <!-- End Action Section -->
       </div>
     </div>
@@ -125,12 +125,13 @@ import BaseButton from "./ui/BaseButton.vue";
 
 .overview-section .body {
   font-size: 0.75rem;
+  margin-bottom: 10px;
 }
 
 /* ... existing styles ... */
 .overview-section {
   max-height: calc(100% - 60px);
-  overflow-y: hidden; /* Hide the main scrollbar of the section */
+  overflow-y: hidden;
   word-wrap: break-word;
   position: relative; /* Ensure relative positioning for absolute positioning of header */
 
@@ -145,7 +146,7 @@ import BaseButton from "./ui/BaseButton.vue";
   .body-container {
     overflow-y: auto; /* Enable scrolling only for the body container */
     max-height: calc(
-      100% - 40px
+      100% - 50px
     ); /* Adjust the value to leave space for the header */
     padding: 10px; /* Adjust padding as needed */
   }
@@ -157,17 +158,18 @@ import BaseButton from "./ui/BaseButton.vue";
 }
 
 .overview-section .body-container::-webkit-scrollbar-thumb {
-  background-color: #555555;
+  background-color: #d9d9d9;
   border-radius: 4px;
 }
 
 .overview-section .body-container::-webkit-scrollbar-track {
   background-color: #363b45; /* Color of the track */
-  border-radius: 4px; /* Rounded corners of the track */
+  border-radius: 4px;
 }
 /* ... existing styles ... */
 
 /* Rating Section */
+
 .rating-section .body {
   font-size: 1rem;
 }
