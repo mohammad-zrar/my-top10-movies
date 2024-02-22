@@ -14,15 +14,24 @@
         <div class="overview-section">
           <h3 class="header">My Overview</h3>
           <p class="body">
-            A New York stockbroker refuses to cooperate in a large securities
-            fraud case involving corruption on Wall Street, corporate banking
-            world and mob infiltration. Based on Jordan Belfort's autobiography.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
+            gravida justo. Integer nec arcu ut ligula tristique lobortis eu id
+            nisl. Quisque at velit non elit euismod vulputate. Fusce eu
+            fringilla libero. Proin at mi sit amet urna ullamcorper suscipit ac
+            eu dui. In hac habitasse platea dictumst. Nam bibendum purus nec
+            tellus fringilla, vel efficitur nisi vulputate. Suspendisse in massa
+            nec ex vulputate commodo. Vestibulum sagittis, nisl vitae bibendum
+            congue, odio arcu vestibulum velit, sit amet tristique libero purus
+            vel elit. Vestibulum consectetur turpis sit amet sapien consectetur,
+            at lacinia justo hendrerit. Duis vel purus vitae tortor luctus
+            bibendum.
           </p>
         </div>
         <div class="rating-section">
           <h3 class="header">My Rate</h3>
           <p class="body"><span id="rate-value">8</span> / 10</p>
         </div>
+        <!-- Actions Section -->
         <div class="actions-section">
           <div class="edit-button">
             <base-button btnStyle="light">Edit</base-button>
@@ -31,6 +40,7 @@
             <base-button btnStyle="danger">Delete</base-button>
           </div>
         </div>
+        <!-- End Action Section -->
       </div>
     </div>
   </div>
@@ -77,9 +87,17 @@ import BaseButton from "./ui/BaseButton.vue";
 }
 
 .flip-card-back {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: #242933;
   color: #ffffff;
   transform: rotateY(180deg);
+  box-sizing: border-box;
+  padding: 10px;
+  overflow: hidden; /* Prevent overflow from the sides */
+  width: 300px; /* Set the desired width */
+  height: 450px; /* Set the desired height */
 }
 .rank-number {
   position: absolute;
@@ -88,22 +106,45 @@ import BaseButton from "./ui/BaseButton.vue";
   color: white;
   font-size: 4rem;
 }
+/* Movie title */
 .movie-title {
-  margin-top: 1rem;
+  font-size: 1.25rem;
 }
+
+/* Overview section */
+.overview-section {
+  max-height: calc(
+    100% - 60px
+  ); /* Adjust the value to leave space for header and actions */
+  overflow-y: auto; /* Use 'auto' to show scrollbars if necessary */
+  word-wrap: break-word;
+  &::-webkit-scrollbar {
+    width: 8px; /* Set the width of the scrollbar */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d9d9d9; /* Color of the thumb */
+    border-radius: 4px; /* Rounded corners of the thumb */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #363b45; /* Color of the track */
+    border-radius: 4px;
+  }
+}
+
 .overview-section .header,
 .rating-section .header {
   color: #ff2e63;
   display: inline-block;
   font-weight: 500;
   border-bottom: solid 1px #ff2e63;
-  margin-bottom: 0.5rem;
 }
 
 .overview-section .body {
-  font-size: 0.9rem;
-  margin: auto 0.5rem;
+  font-size: 0.75rem;
 }
+/* Rating Section */
 .rating-section .body {
   font-size: 1rem;
 }
@@ -114,6 +155,8 @@ import BaseButton from "./ui/BaseButton.vue";
 
 /* ---- Actions section ---- */
 .actions-section {
+  margin-top: 4rem;
   display: flex;
+  justify-content: space-around;
 }
 </style>
