@@ -39,10 +39,10 @@
       </div>
 
       <div class="form-actions">
-        <base-button btnStyle="blue">
+        <base-button btnStyle="primery">
           {{ formAction }}
         </base-button>
-        <base-button type="button" btnStyle="flat" @click="changeAction">
+        <base-button type="button" btnStyle="light" @click="changeAction">
           <span v-if="formAction === 'Register'">Login</span>
           <span v-else>Register</span> Instead</base-button
         >
@@ -58,7 +58,7 @@
       <p>{{ dialogMessage }}</p>
     </template>
     <template #actions>
-      <base-button color="red" @click="toggleDialog">
+      <base-button @click="toggleDialog">
         <span>Close</span>
       </base-button>
     </template>

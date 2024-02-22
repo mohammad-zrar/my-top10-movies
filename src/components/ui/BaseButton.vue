@@ -10,10 +10,10 @@ export default {
     btnStyle: {
       type: String,
       required: false,
-      default: "blue",
+      default: "primery",
       validator(value) {
         // The value must match one of these strings
-        return ["blue", "red", "gray", "flat"].includes(value);
+        return ["primery", "warning", "danger", "light"].includes(value);
       },
     },
   },
@@ -36,18 +36,31 @@ export default {
   border-radius: 5px;
   cursor: pointer;
 }
-.blue {
+/* Primery */
+.primery {
   background-color: #08d9d6;
+  color: #252a34;
 }
-.blue:hover,
-.blue:active {
-  background-color: #06c8c5;
+.primery:hover,
+.primery:active {
+  background-color: #07c8c5;
 }
-.flat {
-  background-color: inherit;
+/* light */
+.light {
+  background-color: #eaeaea;
+  color: #252a34;
 }
-.flat:hover,
-.flat:active {
+.light:hover,
+.light:active {
   background-color: #d9d9d9;
+}
+/* danger */
+.danger {
+  background-color: #ff2e63;
+  color: #eaeaea;
+}
+.danger:hover,
+.danger:active {
+  background-color: #ee1d52;
 }
 </style>

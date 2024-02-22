@@ -25,10 +25,10 @@
         </div>
         <div class="actions-section">
           <div class="edit-button">
-            <base-button>Edit</base-button>
+            <base-button btnStyle="light">Edit</base-button>
           </div>
           <div class="delete-button">
-            <base-button>Delete</base-button>
+            <base-button btnStyle="danger">Delete</base-button>
           </div>
         </div>
       </div>
