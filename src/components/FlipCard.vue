@@ -10,28 +10,20 @@
         />
       </div>
       <div class="flip-card-back">
-        <h1 class="movie-title">The Wolf of Wall Street (1999)</h1>
+        <h1 class="movie-title">{{ title }} ({{ year }})</h1>
         <div class="overview-section">
           <h3 class="header">My Overview</h3>
           <div class="body-container">
             <p class="body">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
-              gravida justo. Integer nec arcu ut ligula tristique lobortis eu id
-              nisl. Quisque at velit non elit euismod vulputate. Fusce eu
-              fringilla libero. Proin at mi sit amet urna ullamcorper suscipit
-              ac eu dui. In hac habitasse platea dictumst. Nam bibendum purus
-              nec tellus fringilla, vel efficitur nisi vulputate. Suspendisse in
-              massa nec ex vulputate commodo. Vestibulum sagittis, nisl vitae
-              bibendum congue, odio arcu vestibulum velit, sit amet tristique
-              libero purus vel elit. Vestibulum consectetur turpis sit amet
-              sapien consectetur, at lacinia justo hendrerit. Duis vel purus
-              vitae tortor luctus bibendum.
+              {{ overview }}
             </p>
           </div>
         </div>
         <div class="rating-section">
           <h3 class="header">My Rate</h3>
-          <p class="body"><span id="rate-value">8</span> / 10</p>
+          <p class="body">
+            <span id="rate-value">{{ rating }}</span> / 10
+          </p>
         </div>
         <!-- Actions Section -->
         <div class="actions-section">
@@ -48,8 +40,15 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import BaseButton from "./ui/BaseButton.vue";
+
+const movieInfo = defineProps({
+  title: String,
+  year: Number,
+  overview: String,
+  rating: Number,
+});
 </script>
 <style scoped>
 .flip-card {

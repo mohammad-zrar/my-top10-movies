@@ -4,7 +4,22 @@
     <p>Welcome to my top 10 favorite movie pinner profile ❤</p>
   </header>
   <section class="movies-list">
-    <flip-card></flip-card>
+    <flip-card
+      title="The wolf of wall street"
+      year="2017"
+      overview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
+              gravida justo. Integer nec arcu ut ligula tristique lobortis eu id
+              nisl. Quisque at velit non elit euismod vulputate. Fusce eu
+              fringilla libero. Proin at mi sit amet urna ullamcorper suscipit
+              ac eu dui. In hac habitasse platea dictumst. Nam bibendum purus
+              nec tellus fringilla, vel efficitur nisi vulputate. Suspendisse in
+              massa nec ex vulputate commodo. Vestibulum sagittis, nisl vitae
+              bibendum congue, odio arcu vestibulum velit, sit amet tristique
+              libero purus vel elit. Vestibulum consectetur turpis sit amet
+              sapien consectetur, at lacinia justo hendrerit. Duis vel purus
+              vitae tortor luctus bibendum."
+      rating="8.4"
+    ></flip-card>
   </section>
 
   <pre>{{ profileData }}</pre>
@@ -26,7 +41,9 @@ const profileStore = useProfileStore();
 
 const profileData = ref({
   userId: "",
-  profile: { username: "" },
+  profile: {
+    username: "",
+  },
 });
 
 onMounted(async () => {
