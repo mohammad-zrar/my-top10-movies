@@ -76,6 +76,11 @@ dialog menu {
   align-items: center;
   padding: 0.6rem 0.3rem 0 0;
 }
+@media only screen and (max-width: 481px) {
+  dialog {
+    width: 80%;
+  }
+}
 .v-enter-active,
 .v-leave-active {
   transition: all 0.5s ease;
