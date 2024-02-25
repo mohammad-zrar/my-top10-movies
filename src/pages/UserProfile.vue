@@ -33,13 +33,14 @@
           type="text"
           id="movieSearchInput"
           placeholder="Enter movie name"
+          v-model="searchMovieInput"
         />
       </div>
     </template>
     <template #actions>
       <div class="searchMovieActions">
-        <base-button @click="toggleDialog" btnStyle="light">Close</base-button>
         <base-button @click="searchMovie">Search</base-button>
+        <base-button @click="toggleDialog" btnStyle="light">Close</base-button>
       </div>
     </template>
   </base-dialog>
@@ -69,6 +70,7 @@ const profileData = ref({
     username: "",
   },
 });
+const searchMovieInput = ref("");
 
 const isAdmin = computed(() => {
   if (profileData.value.userId === authStore.getUserId) {
@@ -86,7 +88,11 @@ function toggleDialog() {
 }
 
 function searchMovie() {
-  console.log("push router");
+  const encodedSearchString = encodeURIComponent(searchMovieInput.value);
+  router.push({
+    name: "addMovie",
+    query: { search: encodedSearchString },
+  });
 }
 
 onMounted(async () => {
@@ -155,7 +161,6 @@ header {
   margin: auto 1rem;
   width: 100%;
   display: flex;
-  justify-content: end;
   gap: 10px;
 }
 </style>
