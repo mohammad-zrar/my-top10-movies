@@ -52,7 +52,7 @@ const useAuthStore = defineStore("use-auth", {
         }
       }
       const response = await axios
-        .post(`${url}?key=${import.meta.env.VITE_API_KEY}`, {
+        .post(`${url}?key=${import.meta.env.VITE_FIREBASE_API_KEY}`, {
           email: payload.email,
           password: payload.password,
           returnSecureToken: true,
