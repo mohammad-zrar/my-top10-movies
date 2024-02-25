@@ -15,60 +15,29 @@
     <section class="result-section">
       <h4 v-if="false" class="no-result">No Movie Found</h4>
       <div else class="search-results">
-        <div class="result-item">
+        <div class="result-item" v-for="movie in moviesList">
           <div class="moviePoster">
             <img
               class="movie-poster"
-              src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/34m2tygAYBGqA9MXKhRDtzYd4MR.jpg"
+              :src="
+                'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' +
+                movie.poster_path
+              "
               alt="poster"
             />
           </div>
           <div class="movie-info">
             <p>
               <span class="info-key">Title:</span>
-              <span class="title"> The wolf wall Street</span>
+              <span class="title">&nbsp {{ movie.original_title }}</span>
             </p>
             <p>
               <span class="info-key">Release Date:</span>
-              <span class="release-date"> 2013-12-5</span>
+              <span class="release-date"> &nbsp{{ movie.release_date }}</span>
             </p>
             <p>
               <span class="info-key">Overview:</span>
-              <span class="overview">
-                A New York stockbroker refuses to cooperate in a large
-                securities fraud case involving corruption on Wall Street,
-                corporate banking world and mob infiltration. Based on Jordan
-                Belfort's autobiography.</span
-              >
-            </p>
-          </div>
-        </div>
-        <!-- Second Item -->
-        <div class="result-item">
-          <div class="moviePoster">
-            <img
-              class="movie-poster"
-              src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/34m2tygAYBGqA9MXKhRDtzYd4MR.jpg"
-              alt="poster"
-            />
-          </div>
-          <div class="movie-info">
-            <p>
-              <span class="info-key">Title:</span>
-              <span class="title"> The wolf wall Street</span>
-            </p>
-            <p>
-              <span class="info-key">Release Date:</span>
-              <span class="release-date"> 2013-12-5</span>
-            </p>
-            <p>
-              <span class="info-key">Overview:</span>
-              <span class="overview">
-                A New York stockbroker refuses to cooperate in a large
-                securities fraud case involving corruption on Wall Street,
-                corporate banking world and mob infiltration. Based on Jordan
-                Belfort's autobiography.</span
-              >
+              <span class="overview">&nbsp {{ movie.overview }} </span>
             </p>
           </div>
         </div>
@@ -77,7 +46,7 @@
   </div>
 </template>
 <script setup>
-import { defineProps, computed, onMounted } from "vue";
+import { ref, defineProps, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import searchMovie from "../api/api.js";
 import BaseButton from "../components/ui/BaseButton.vue";
@@ -90,18 +59,23 @@ const authStore = useAuthStore();
 
 const movieName = computed(() => {
   return decodeURIComponent(route.query.search);
-  r;
 });
+const moviesList = ref({});
 
+onMounted(async () => {
+  try {
+    const response = await searchMovie(movieName.value);
+    moviesList.value = response.results;
+  } catch (err) {
+    console.log(err);
+  }
+});
 function getBack() {
   router.push({
     name: "userProfile",
     params: { username: authStore.getUsername },
   });
 }
-onMounted(() => {
-  searchMovie(movieName.value);
-});
 </script>
 
 <style scoped>
