@@ -1,6 +1,12 @@
 <template>
   <teleport to="body">
-    <div class="backdrop" v-show="show" @click="emits('close')"></div>
+    <div
+      v-if="backdrop"
+      class="backdrop"
+      v-show="show"
+      @click="emits('close')"
+    ></div>
+    <div v-else v-show="show" class="backdrop"></div>
     <Transition>
       <dialog open v-show="show">
         <header>
@@ -29,6 +35,10 @@ const props = defineProps({
   show: {
     type: Boolean,
     required: true,
+  },
+  backdrop: {
+    type: Boolean,
+    default: true,
   },
 });
 

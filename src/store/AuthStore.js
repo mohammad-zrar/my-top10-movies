@@ -5,9 +5,9 @@ let timer;
 const useAuthStore = defineStore("use-auth", {
   state: () => {
     return {
-      userId: "",
-      token: "",
-      username: "",
+      userId: null,
+      token: null,
+      username: null,
       isUserAuthenticated: false,
     };
   },
