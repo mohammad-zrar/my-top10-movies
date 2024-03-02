@@ -12,7 +12,10 @@
         <li class="nav-item">
           <router-link
             @click="toggle"
-            :to="{ name: 'home' }"
+            :to="{
+              name: 'userProfile',
+              params: { username: authStore.getUsername },
+            }"
             v-if="isAuthenticated"
             >My Profile</router-link
           >

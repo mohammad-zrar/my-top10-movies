@@ -15,7 +15,11 @@
     <section class="result-section">
       <h4 v-if="false" class="no-result">No Movie Found</h4>
       <div else class="search-results">
-        <div class="result-item" v-for="movie in moviesList">
+        <div
+          class="result-item"
+          v-for="movie in moviesList"
+          @click="addMovie(movie)"
+        >
           <div class="moviePoster">
             <img
               class="movie-poster"
@@ -29,7 +33,7 @@
           <div class="movie-info">
             <p>
               <span class="info-key">Title:</span>
-              <span class="title">&nbsp {{ movie.original_title }}</span>
+              <span class="title">&nbsp {{ movie.title }}</span>
             </p>
             <p>
               <span class="info-key">Release Date:</span>
@@ -61,6 +65,9 @@ const movieName = computed(() => {
   return decodeURIComponent(route.query.search);
 });
 const moviesList = ref({});
+function addMovie(movie) {
+  console.log(movie);
+}
 
 onMounted(async () => {
   try {
