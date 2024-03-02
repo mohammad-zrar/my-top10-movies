@@ -99,6 +99,10 @@ onMounted(async () => {
   const profile = await profileStore.getProfileByUsernam({
     username: route.params.username,
   });
+  if (!profile) {
+    router.push({ name: "notFound" });
+  }
+
   profileData.value = { ...profile };
 });
 </script>

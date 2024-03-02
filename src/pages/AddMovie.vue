@@ -15,34 +15,17 @@
     <section class="result-section">
       <h4 v-if="false" class="no-result">No Movie Found</h4>
       <div else class="search-results">
-        <div
-          class="result-item"
-          v-for="movie in moviesList"
-          @click="addMovie(movie)"
-        >
-          <div class="moviePoster">
-            <img
-              class="movie-poster"
-              :src="
-                'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' +
-                movie.poster_path
-              "
-              alt="poster"
-            />
-          </div>
-          <div class="movie-info">
-            <p>
-              <span class="info-key">Title:</span>
-              <span class="title">&nbsp {{ movie.title }}</span>
-            </p>
-            <p>
-              <span class="info-key">Release Date:</span>
-              <span class="release-date"> &nbsp{{ movie.release_date }}</span>
-            </p>
-            <p>
-              <span class="info-key">Overview:</span>
-              <span class="overview">&nbsp {{ movie.overview }} </span>
-            </p>
+        <div class="card" v-for="movie in moviesList" @click="addMovie(movie)">
+          <img
+            :src="
+              'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' +
+              movie.poster_path
+            "
+            alt="Movie Poster"
+          />
+          <div class="card-content">
+            <h2>{{ movie.title }}</h2>
+            <p>Release Date: {{ movie.release_date }}</p>
           </div>
         </div>
       </div>
@@ -86,6 +69,43 @@ function getBack() {
 </script>
 
 <style scoped>
+.search-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.card {
+  max-width: 320px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  cursor: pointer;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-content {
+  padding: 16px;
+}
+
+.card-content h2 {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.card-content p {
+  color: #555;
+}
+
+/* ---------------------- */
 .container {
   width: 100%;
   margin: 1rem auto;
@@ -101,77 +121,9 @@ function getBack() {
   left: 1rem;
 }
 
-.container h1 {
-  margin-bottom: 3rem;
-}
-.no-result {
-  color: #ff2e63;
-}
-/* Search Results */
-
-.result-item {
-  background-color: #d9d9d9;
-  border: 1px solid #7a7f89;
-  border-radius: 8px;
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  box-shadow: 0 0 7px rgba(37, 42, 52, 0.4);
-  width: 75%;
-  margin: 1rem auto;
-}
-.movie-poster {
-  width: 120px;
-  height: 180px;
-}
-.movie-info {
-  text-align: left;
-}
-.movie-info .info-key {
-  color: #252a34;
-  font-weight: bold;
-}
-.movie-info .title {
-  color: #ff2e63;
-  font-weight: bold;
-}
-.movie-info .release-date {
-  font-weight: bold;
-  color: #474c56;
-}
-.movie-info .overview {
-  font-size: 0.9rem;
-  color: #252a34;
-}
-
 @media only screen and (max-width: 768px) {
-  .container h1 {
-    font-size: 2rem;
-  }
-  .result-item {
-    width: 100%;
-  }
 }
-@media only screen and (max-width: 481px) {
-  .container {
-    margin: 0;
-  }
-  .container h1 {
-    font-size: 1.25rem;
-  }
 
-  .movie-poster {
-    width: 90px;
-    height: 135px;
-  }
-  .movie-info .overview {
-    font-size: 0.8rem;
-  }
-  .result-item {
-    width: auto;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
+@media only screen and (max-width: 481px) {
 }
 </style>
