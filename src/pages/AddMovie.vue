@@ -28,6 +28,22 @@
             <p>Release Date: {{ movie.release_date }}</p>
           </div>
         </div>
+        <base-dialog backdrop :show="showDialog" @close="toggleDialog">
+          <template #header>
+            <h3>Adding Movie...</h3>
+          </template>
+          <template #body>
+            <p>Har lo fshay</p>
+          </template>
+          <template #actions>
+            <div class="searchMovieActions">
+              <base-button @click="searchMovie">Search</base-button>
+              <base-button @click="toggleDialog" btnStyle="light"
+                >Close</base-button
+              >
+            </div>
+          </template>
+        </base-dialog>
       </div>
     </section>
   </div>
@@ -37,6 +53,7 @@ import { ref, defineProps, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import searchMovie from "../api/api.js";
 import BaseButton from "../components/ui/BaseButton.vue";
+import BaseDialog from "../components/ui/BaseDialog.vue";
 import useAuthStore from "../store/AuthStore";
 
 const route = useRoute();
@@ -44,12 +61,21 @@ const router = useRouter();
 
 const authStore = useAuthStore();
 
+const loading = ref(false);
+const showDialog = ref(false);
+
+function toggleDialog() {
+  showDialog.value = !showDialog.value;
+  loading.value = false;
+}
+
 const movieName = computed(() => {
   return decodeURIComponent(route.query.search);
 });
 const moviesList = ref({});
 function addMovie(movie) {
   console.log(movie);
+  toggleDialog();
 }
 
 onMounted(async () => {
@@ -105,6 +131,10 @@ function getBack() {
   color: #555;
 }
 
+.searchMovieActions {
+  display: flex;
+  gap: 1rem;
+}
 /* ---------------------- */
 .container {
   width: 100%;

@@ -50,16 +50,15 @@ const emits = defineEmits(["close"]);
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.25);
-
   position: fixed;
   top: 0;
   right: 0;
   z-index: 10;
 }
 dialog {
-  position: absolute;
-  top: 32%;
-  margin: 0 auto;
+  position: fixed;
+  top: 40%;
+  margin: auto;
   padding: 1rem 1rem 0.5rem;
   width: 45%;
   border: none;
