@@ -57,7 +57,7 @@ const emits = defineEmits(["close"]);
 }
 dialog {
   position: fixed;
-  top: 40%;
+  top: 25%;
   margin: auto;
   padding: 1rem 1rem 0.5rem;
   width: 45%;

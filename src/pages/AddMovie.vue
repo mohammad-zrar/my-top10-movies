@@ -1,6 +1,6 @@
 <template>
   <div class="get-back">
-    <base-button btnStyle="light" @click="getBack">
+    <base-button btnStyle="light" @click="getBack()">
       <font-awesome-icon
         icon="fa-solid fa-left-long"
         class="back-logo"
@@ -33,11 +33,50 @@
             <h3>Adding Movie...</h3>
           </template>
           <template #body>
-            <p>Har lo fshay</p>
+            <form action="">
+              <label for="movieTitle">Movie Title:</label>
+              <input
+                type="text"
+                id="movieTitle"
+                v-model="movieToAdd.movieTitle"
+                name="movieTitle"
+                required
+                disabled
+              />
+
+              <label for="releaseYear">Release Date:</label>
+              <input
+                disabled
+                v-model="movieToAdd.releaseDate"
+                name="releaseDate"
+                required
+              />
+
+              <label for="overview">Overview:</label>
+              <textarea
+                v-model="movieToAdd.overview"
+                id="overview"
+                name="overview"
+                rows="4"
+                required
+              ></textarea>
+
+              <label for="rating">Rating (out of 10):</label>
+              <input
+                v-model="movieToAdd.rate"
+                type="number"
+                id="rating"
+                name="rating"
+                min="0"
+                max="10"
+                step="0.1"
+                required
+              />
+            </form>
           </template>
           <template #actions>
             <div class="searchMovieActions">
-              <base-button @click="searchMovie">Search</base-button>
+              <base-button @click="addToDb">Add</base-button>
               <base-button @click="toggleDialog" btnStyle="light"
                 >Close</base-button
               >
@@ -55,14 +94,23 @@ import searchMovie from "../api/api.js";
 import BaseButton from "../components/ui/BaseButton.vue";
 import BaseDialog from "../components/ui/BaseDialog.vue";
 import useAuthStore from "../store/AuthStore";
+import useProfileStore from "../store/ProfileStore.js";
 
 const route = useRoute();
 const router = useRouter();
 
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
 
 const loading = ref(false);
 const showDialog = ref(false);
+
+const movieToAdd = ref({
+  movieTitle: "",
+  releaseDate: "",
+  overview: "",
+  rate: null,
+});
 
 function toggleDialog() {
   showDialog.value = !showDialog.value;
@@ -73,9 +121,18 @@ const movieName = computed(() => {
   return decodeURIComponent(route.query.search);
 });
 const moviesList = ref({});
+
 function addMovie(movie) {
-  console.log(movie);
+  movieToAdd.value.movieTitle = movie.title;
+  movieToAdd.value.releaseDate = movie.release_date;
+  movieToAdd.value.imgPoster =
+    "https://image.tmdb.org/t/p/w600_and_h900_bestv2/" + movie.poster_path;
+
   toggleDialog();
+}
+
+async function addToDb() {
+  await profileStore.addMovie(movieToAdd.value);
 }
 
 onMounted(async () => {
@@ -135,6 +192,22 @@ function getBack() {
   display: flex;
   gap: 1rem;
 }
+/* Form styles */
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #252a34;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  outline: none;
+}
+
 /* ---------------------- */
 .container {
   width: 100%;

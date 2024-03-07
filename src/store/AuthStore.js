@@ -21,6 +21,9 @@ const useAuthStore = defineStore("use-auth", {
     getUsername(state) {
       return state.username;
     },
+    getToken(state) {
+      return state.token;
+    },
   },
 
   actions: {

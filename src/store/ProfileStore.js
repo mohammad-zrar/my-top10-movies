@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import useAuthStore from "./AuthStore";
 
 const useProfileStore = defineStore("use-profile", {
   actions: {
@@ -53,6 +54,19 @@ const useProfileStore = defineStore("use-profile", {
         }
       }
       return true;
+    },
+    async addMovie(payload) {
+      const authStore = useAuthStore();
+
+      const response = await axios.patch(
+        `${import.meta.env.VITE_REF_URL}profiles/${
+          authStore.getUserId
+        }/profile/movies.json?auth=${authStore.getToken}`,
+        {
+          ...payload,
+        }
+      );
+      console.log(response);
     },
   },
 });
