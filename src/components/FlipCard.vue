@@ -10,7 +10,9 @@
         />
       </div>
       <div class="flip-card-back">
-        <h1 class="movie-title">{{ title }} ({{ year }})</h1>
+        <h1 class="movie-title">
+          {{ title }} <span v-if="year">({{ year }})</span>
+        </h1>
         <div class="overview-section">
           <h3 class="header">My Overview</h3>
           <div class="body-container">
@@ -57,7 +59,7 @@ const movieInfo = defineProps({
   width: 300px;
   height: 450px;
   perspective: 1000px;
-  margin: auto;
+  margin: 2rem auto;
 }
 
 .flip-card-inner {

@@ -16,14 +16,12 @@
     <flip-card
       v-for="movie in profileData.profile.movies"
       :title="movie.movieTitle"
-      :year="2017"
+      :year="movie.year"
       :overview="movie.overview"
       :rating="movie.rate"
       :imgPoster="movie.imgPoster"
     ></flip-card>
   </section>
-
-  <pre>{{ profileData }}</pre>
   <base-dialog :backdrop="false" :show="showDialog" @close="toggleDialog">
     <template #header>
       <h3>Adding Movie...</h3>

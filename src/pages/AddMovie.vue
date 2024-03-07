@@ -107,7 +107,7 @@ const showDialog = ref(false);
 
 const movieToAdd = ref({
   movieTitle: "",
-  releaseDate: "",
+  year: null,
   overview: "",
   rate: null,
 });
@@ -124,7 +124,8 @@ const moviesList = ref({});
 
 function addMovie(movie) {
   movieToAdd.value.movieTitle = movie.title;
-  movieToAdd.value.releaseDate = movie.release_date;
+  movieToAdd.value.year = parseInt(movie.release_date.split("-")[0]);
+  console.log(movieToAdd.value.year);
   movieToAdd.value.imgPoster =
     "https://image.tmdb.org/t/p/w600_and_h900_bestv2/" + movie.poster_path;
   movieToAdd.value.overview = movie.overview;
@@ -133,6 +134,10 @@ function addMovie(movie) {
 
 async function addToDb() {
   await profileStore.addMovie(movieToAdd.value);
+  router.push({
+    name: "userProfile",
+    params: { username: authStore.getUsername },
+  });
 }
 
 onMounted(async () => {
