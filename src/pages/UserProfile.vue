@@ -68,6 +68,7 @@ const profileData = ref({
   userId: null,
   profile: {
     username: "",
+    movieList: {},
   },
 });
 const searchMovieInput = ref("");

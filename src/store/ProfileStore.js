@@ -58,7 +58,7 @@ const useProfileStore = defineStore("use-profile", {
     async addMovie(payload) {
       const authStore = useAuthStore();
 
-      const response = await axios.patch(
+      const response = await axios.post(
         `${import.meta.env.VITE_REF_URL}profiles/${
           authStore.getUserId
         }/profile/movies.json?auth=${authStore.getToken}`,
