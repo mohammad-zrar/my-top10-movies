@@ -4,7 +4,7 @@
       <div class="flip-card-front">
         <h1 class="rank-number">1</h1>
         <img
-          src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/34m2tygAYBGqA9MXKhRDtzYd4MR.jpg"
+          :src="imgPoster"
           alt="Poster"
           style="width: 300px; height: 450px"
         />
@@ -48,6 +48,7 @@ const movieInfo = defineProps({
   year: Number,
   overview: String,
   rating: Number,
+  imgPoster: String,
 });
 </script>
 <style scoped>

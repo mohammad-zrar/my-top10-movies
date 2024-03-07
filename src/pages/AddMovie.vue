@@ -127,7 +127,7 @@ function addMovie(movie) {
   movieToAdd.value.releaseDate = movie.release_date;
   movieToAdd.value.imgPoster =
     "https://image.tmdb.org/t/p/w600_and_h900_bestv2/" + movie.poster_path;
-
+  movieToAdd.value.overview = movie.overview;
   toggleDialog();
 }
 

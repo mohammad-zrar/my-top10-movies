@@ -13,12 +13,14 @@
     </select>
   </section>
   <section class="movies-list">
-    <!-- <flip-card
-      title=""
+    <flip-card
+      v-for="movie in profileData.profile.movies"
+      :title="movie.movieTitle"
       :year="2017"
-      overview=""
-      :rating="8.4"
-    ></flip-card> -->
+      :overview="movie.overview"
+      :rating="movie.rate"
+      :imgPoster="movie.imgPoster"
+    ></flip-card>
   </section>
 
   <pre>{{ profileData }}</pre>
