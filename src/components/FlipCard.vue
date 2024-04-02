@@ -2,7 +2,7 @@
   <div class="flip-card">
     <div class="flip-card-inner">
       <div class="flip-card-front">
-        <h1 class="rank-number">1</h1>
+        <h1 class="rank-number">{{ index + 1 }}</h1>
         <img
           :src="imgPoster"
           alt="Poster"
@@ -51,6 +51,7 @@ const movieInfo = defineProps({
   overview: String,
   rating: Number,
   imgPoster: String,
+  index: String,
 });
 </script>
 <style scoped>

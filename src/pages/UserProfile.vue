@@ -7,20 +7,22 @@
     <base-button v-if="isAdmin" @click="toggleDialog"
       >Add movie to your list</base-button
     >
-    <select class="sort" name="sort" id="sort">
+    <select class="select-sort" name="sort" id="sort">
       <option value="asc">Ascending Order</option>
       <option value="desc">Descending Order</option>
     </select>
   </section>
   <section class="movies-list">
     <flip-card
-      v-for="movie in profileData.profile.movies"
+      v-for="(movie, key, index) in profileData.profile.movies"
       :title="movie.movieTitle"
       :year="movie.year"
       :overview="movie.overview"
       :rating="movie.rate"
       :imgPoster="movie.imgPoster"
-    ></flip-card>
+      :index="index"
+      :key="key"
+    />
   </section>
   <base-dialog :backdrop="false" :show="showDialog" @close="toggleDialog">
     <template #header>
@@ -49,30 +51,33 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+// STORES
 import useProfileStore from "../store/ProfileStore.js";
 import useAuthStore from "../store/AuthStore.js";
-// Imported componented //
+// COMPONENTS
 import FlipCard from "../components/FlipCard.vue";
 import BaseButton from "../components/ui/BaseButton.vue";
 import BaseDialog from "../components/ui/BaseDialog.vue";
 
-// ------------------- /
-
+// ---- COMPOSABLES ---- //
 const router = useRouter();
 const route = useRoute();
-
 const profileStore = useProfileStore();
 const authStore = useAuthStore();
 
+// ---- STATUS ---- //
 const profileData = ref({
   userId: null,
   profile: {
     username: "",
-    movieList: {},
+    movies: {},
   },
 });
 const searchMovieInput = ref("");
+const loading = ref(false);
+const showDialog = ref(false);
 
+// ---- COMPUTED ---- //
 const isAdmin = computed(() => {
   if (profileData.value.userId === authStore.getUserId) {
     return true;
@@ -80,9 +85,8 @@ const isAdmin = computed(() => {
     return false;
   }
 });
-const loading = ref(false);
-const showDialog = ref(false);
 
+// ---- FUNCTIONS ---- //
 function toggleDialog() {
   showDialog.value = !showDialog.value;
   loading.value = false;
@@ -96,6 +100,21 @@ function searchMovie() {
   });
 }
 
+function sortMovies(sortOrder = "asc") {
+  let swapObj = {};
+  const movies = profileData.value.profile.movies;
+  for (const movie1 in movies) {
+    for (const movie2 in movies) {
+      if (movies[movie1].rate > movies[movie2].rate) {
+        swapObj = movies[movie1];
+        profileData.value.profile.movies[movie1] = movies[movie2];
+        profileData.value.profile.movies[movie2] = swapObj;
+      }
+    }
+  }
+}
+
+// ---- LIFECYCLE HOOKS ---- //
 onMounted(async () => {
   const profile = await profileStore.getProfileByUsernam({
     username: route.params.username,
@@ -103,8 +122,12 @@ onMounted(async () => {
   if (!profile) {
     router.push({ name: "notFound" });
   }
-
   profileData.value = { ...profile };
+  sortMovies();
+  console.log(profileData.value.profile.movies);
+  for (const movie in profileData.value.profile.movies) {
+    console.log(profileData.value.profile.movies);
+  }
 });
 </script>
 
@@ -119,7 +142,7 @@ header {
   gap: 1rem;
   margin-bottom: 2rem;
 }
-.actions .sort {
+.actions .select-sort {
   background-color: #eaeaea;
   color: #252a34;
   border-radius: 5px;

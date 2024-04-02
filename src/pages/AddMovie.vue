@@ -125,7 +125,6 @@ const moviesList = ref({});
 function addMovie(movie) {
   movieToAdd.value.movieTitle = movie.title;
   movieToAdd.value.year = parseInt(movie.release_date.split("-")[0]);
-  console.log(movieToAdd.value.year);
   movieToAdd.value.imgPoster =
     "https://image.tmdb.org/t/p/w600_and_h900_bestv2/" + movie.poster_path;
   movieToAdd.value.overview = movie.overview;
