@@ -7,9 +7,9 @@
     <base-button v-if="isAdmin" @click="toggleDialog"
       >Add movie to your list</base-button
     >
-    <select class="select-sort" name="sort" id="sort">
-      <option value="asc">Ascending Order</option>
-      <option value="desc">Descending Order</option>
+    <select v-model="orderBy" class="select-sort" name="sort" id="sort">
+      <option value="asc">Ascending Order by Rate</option>
+      <option value="desc">Descending Order by Rate</option>
     </select>
   </section>
   <section class="movies-list">
@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // STORES
 import useProfileStore from "../store/ProfileStore.js";
@@ -76,6 +76,7 @@ const profileData = ref({
 const searchMovieInput = ref("");
 const loading = ref(false);
 const showDialog = ref(false);
+const orderBy = ref("asc");
 
 // ---- COMPUTED ---- //
 const isAdmin = computed(() => {
@@ -103,16 +104,32 @@ function searchMovie() {
 function sortMovies(sortOrder = "asc") {
   let swapObj = {};
   const movies = profileData.value.profile.movies;
-  for (const movie1 in movies) {
-    for (const movie2 in movies) {
-      if (movies[movie1].rate > movies[movie2].rate) {
-        swapObj = movies[movie1];
-        profileData.value.profile.movies[movie1] = movies[movie2];
-        profileData.value.profile.movies[movie2] = swapObj;
+  if (sortOrder === "asc") {
+    for (const movie1 in movies) {
+      for (const movie2 in movies) {
+        if (movies[movie1].rate > movies[movie2].rate) {
+          swapObj = movies[movie1];
+          profileData.value.profile.movies[movie1] = movies[movie2];
+          profileData.value.profile.movies[movie2] = swapObj;
+        }
+      }
+    }
+  } else {
+    for (const movie1 in movies) {
+      for (const movie2 in movies) {
+        if (movies[movie1].rate < movies[movie2].rate) {
+          swapObj = movies[movie1];
+          profileData.value.profile.movies[movie1] = movies[movie2];
+          profileData.value.profile.movies[movie2] = swapObj;
+        }
       }
     }
   }
 }
+// ---- WATCHERS ---- //
+watch(orderBy, (newValue, oldValue) => {
+  sortMovies(newValue);
+});
 
 // ---- LIFECYCLE HOOKS ---- //
 onMounted(async () => {
@@ -124,10 +141,6 @@ onMounted(async () => {
   }
   profileData.value = { ...profile };
   sortMovies();
-  console.log(profileData.value.profile.movies);
-  for (const movie in profileData.value.profile.movies) {
-    console.log(profileData.value.profile.movies);
-  }
 });
 </script>
 

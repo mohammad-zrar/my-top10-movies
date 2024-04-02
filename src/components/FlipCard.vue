@@ -51,7 +51,7 @@ const movieInfo = defineProps({
   overview: String,
   rating: Number,
   imgPoster: String,
-  index: String,
+  index: Number,
 });
 </script>
 <style scoped>
