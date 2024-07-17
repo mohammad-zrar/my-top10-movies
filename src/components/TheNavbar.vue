@@ -10,6 +10,10 @@
 
       <ul class="nav-menu" :class="{ collapsed: classObjec.collapsed }">
         <li class="nav-item">
+          <input @keyup.enter="searchProfile" v-model="searchInput"  type="text" id="search-input" placeholder="Search profile"/>
+         
+        </li>
+        <li class="nav-item">
           <router-link
             @click="toggle"
             :to="{
@@ -41,15 +45,16 @@
       />
     </button>
   </nav>
+ 
 </template>
 <script setup>
-import { reactive, computed, warn } from "vue";
+import { reactive, computed, warn, ref } from "vue";
 import { useRouter } from "vue-router";
 import useAuthStore from "../store/AuthStore.js";
 
 const authStore = useAuthStore();
 const router = useRouter();
-
+const searchInput = ref("")
 const classObjec = reactive({
   collapsed: false,
   changeNavHieght: false,
@@ -62,12 +67,14 @@ function toggle() {
     classObjec.collapsed = !classObjec.collapsed;
   }
 }
-const dropShow = computed(() => classObjec.dropBack);
 
 function logout() {
   authStore.logout();
 }
 
+function searchProfile () {
+  router.push(`/profile/${searchInput.value}`)
+}
 function logoutFunctions() {
   logout();
   toggle();
@@ -182,6 +189,14 @@ nav {
   .nav-item a.router-link-active {
     border: none;
   }
+}
+
+#search-input {
+  background-color: inherit;
+  padding: 6px 8px;
+  border-radius: 25px;
+  color:#eaeaea;
+  border: solid #ff2e63 1px;
 }
 @media screen and (max-width: 480px) {
   .nav-brand {

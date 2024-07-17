@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, onUpdated } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // STORES
 import useProfileStore from "../store/ProfileStore.js";
@@ -130,8 +130,7 @@ watch(orderBy, (newValue, oldValue) => {
   sortMovies(newValue);
 });
 
-// ---- LIFECYCLE HOOKS ---- //
-onMounted(async () => {
+async function fetchProfile() {
   const profile = await profileStore.getProfileByUsernam({
     username: route.params.username,
   });
@@ -140,7 +139,16 @@ onMounted(async () => {
   }
   profileData.value = { ...profile };
   sortMovies();
+}
+
+// ---- LIFECYCLE HOOKS ---- //
+onMounted(async () => {
+ await fetchProfile()
 });
+
+onUpdated(async () => {
+ await fetchProfile()
+})
 </script>
 
 <style scoped>
