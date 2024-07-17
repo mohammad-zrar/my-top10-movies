@@ -20,7 +20,6 @@
       :overview="movie.overview"
       :rating="movie.rate"
       :imgPoster="movie.imgPoster"
-      :index="index"
       :key="key"
     />
   </section>
